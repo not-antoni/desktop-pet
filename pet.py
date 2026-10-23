@@ -141,7 +141,7 @@ SHAKE_REVERSALS = 5
 SHAKE_WINDOW = 1.4
 LASER_SECONDS = 30
 # Babble for lines the pet volunteers is rarer still than its ambient sounds.
-AMBIENT_BABBLE_CHANCE = 0.35
+AMBIENT_BABBLE_CHANCE = 0.8
 # Characters revealed per tick in the speech bubble (typewriter effect).
 SPEECH_REVEAL_PER_TICK = 2
 # A spoken line counts as an answer to the user (and babbles reliably) if
@@ -1961,10 +1961,16 @@ class DesktopPet(QWidget):
     # =================================================================
 
     def _enter_state(self, new_state):
+        if os.environ.get("PET_TRACE") and new_state != self.state:
+            import traceback
+            sys.stderr.write("STATE %s -> %s from:\n%s\n" % (self.state, new_state, "".join(traceback.format_stack())))
         self.state = new_state
         self.state_timer = 0
 
     def _enter_fall(self):
+        if os.environ.get("PET_TRACE"):
+            import traceback
+            sys.stderr.write("ENTER_FALL from:\n" + "".join(traceback.format_stack()) + "\n")
         self._enter_state("FALL")
         self.current_ledge = None
         self.goal_ledge = None
@@ -1972,7 +1978,11 @@ class DesktopPet(QWidget):
 
     def _enter_sit(self):
         self._enter_state("IDLE" if self.is_ghost else "SIT")
-        if not self._is_on_ledge():
+        if self.flies:
+            # Keep the hover target where the pet already is, so a finished
+            # flight doesn't snap to the floor and then ease back up.
+            self.ghost_hover_y = self.y_pos
+        elif not self._is_on_ledge():
             self.y_pos = self.floor_y
 
     # ---- one-shot reactions -------------------------------------------

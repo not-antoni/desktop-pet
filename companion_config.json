@@ -31,7 +31,7 @@
     }
   },
   "screenshots": {
-    "enabled": false,
+    "enabled": true,
     "interval_minutes": 15,
     "max_per_day": 40,
     "require_recent_activity_minutes": 3,
@@ -47,6 +47,7 @@
     ],
     "jpeg_quality": 70,
     "capture_log_size": 20,
+    "wayland_portal": false,
     "ocr": {
       "enabled": true,
       "engine": "auto",
@@ -90,6 +91,7 @@
     "allow_chase": true,
     "ai_context_lines": true,
     "hide_on_fullscreen": false,
+    "always_on_top": "strong",
     "sleep_when_idle_seconds": 300,
     "quiet_hours": {
       "enabled": false,

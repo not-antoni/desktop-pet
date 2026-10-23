@@ -6,4 +6,5 @@ pet_state.json.tmp
 pet.log
 pet.log.1
 companion_config.json.tmp
+venv
 .env
